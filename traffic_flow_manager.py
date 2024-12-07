@@ -194,6 +194,7 @@ with open(file_name, "a") as file:  # Open in append mode
 # Display results in the shell
 for result in results:
     print(result)
-     
+
+
    
     
