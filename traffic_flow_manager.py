@@ -168,7 +168,23 @@ for row in data:
 
 # Calculate the total number of hours with rain
 total_rain_hours = sum(rain_hours)  # Summing True values gives the count of hours
-results 
+results = [
+    f"The total number of vehicles recorded for this date is {total_count}.",
+    f"The total number of trucks recorded for this date is {truck_count}.",
+    f"The total number of electric vehicles for this date is {electric_vehicle_count}.",
+    f"The total number of two-wheeled vehicles for this date is {two_wheeled_count}.",
+    f"The total number of Busses leaving Elm Avenue/Rabbit Road heading North is {bus_count}.",
+    f"The total number of Vehicles through both junctions not turning left or right is {straight_count}.",
+    f"The percentage of total vehicles recorded that are trucks for this date is {truck_percentage}.",
+    f"The average number of Bikes per hour for this date is {average_bicycles_per_hour}.",
+    f"The total number of Vehicles recorded as over the speed limit for this date is {over_speed_count}.",
+    f"The total number of vehicles recorded through Elm Avenue/Rabbit Road junction is {vehicle_count_elm_rabbit_junction}.",
+    f"The total number of vehicles recorded through Hanley Highway/Westway junction is {vehicle_count_hanley_westway_junction}.",
+    f"{scooter_percentage} of vehicles recorded through Elm Avenue/Rabbit Road are scooters.",
+    f"The highest number of vehicles in an hour on Hanley Highway/Westway is {peak_vehicle_count}.",
+    f"The most vehicles through Hanley Highway/Westway were recorded between {start_time} and {end_time}.",
+    f"The number of hours of rain for this date is {total_rain_hours}."
+]
 # Save results to a file
 file_name = "results.txt"
 with open(file_name, "a") as file:  # Open in append mode
