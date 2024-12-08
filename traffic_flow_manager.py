@@ -116,7 +116,8 @@ average_bicycles_per_hour = round(bicycle_count / 24)
 
 over_speed_count = 0
 for row in data:
-    if row[0] == date and int(row[5]) > speed_limit:
+    if row[0] == date and int(row[5]) > 'JunctionSpeedLimit':
+
         over_speed_count += 1
 
 vehicle_count_elm_rabbit_junction = 0
@@ -142,6 +143,7 @@ for row in data:
             # Check if the VehicleType is 'scooter'
             if row[1].lower() == 'scooter':
                 scooter_count += 1
+scooter_percentage = (scooter_count / total_vehicles * 100) if total_vehicles > 0 else 0
 
 hourly_counts = [0] * 24  # Assuming there are 24 hours in a day
 
@@ -156,6 +158,9 @@ for row in data:
 peak_hour = hourly_counts.index(max(hourly_counts))
 peak_vehicle_count = max(hourly_counts)
 
+start_time = f"{peak_hour:02}:00"  # Format as "HH:00"
+end_time = f"{peak_hour:02}:59"   # Format as "HH:59"
+busiest_period = f"Between {start_time} and {end_time}"
 
 # Initialize a list with 24 False values, one for each hour
 rain_hours = [False] * 24
