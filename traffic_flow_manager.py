@@ -40,7 +40,7 @@ def get_valid_date_string():
     day = get_valid_day()
     month = validate_month()
     year = validate_year()
-    return f"{year}-{month:02d}-{day:02d}"
+    return f"{day:02d}/{month:02d}/{year}"
 
 # Example usage
 date = get_valid_date_string()
@@ -64,6 +64,8 @@ for file_name in file_names:
         print(f"Error: File '{file_name}' not found. Please check the file name and try again.")
     except Exception as e:
         print(f"An unexpected error occurred with file '{file_name}': {e}")
+#for row in data:
+   # print(row)  # Inspect how rows look
 
 # Total number of vehicles
 total_count = len(data)
@@ -71,43 +73,51 @@ total_count = len(data)
 # Total number of trucks for the given date
 truck_count = 0
 for row in data:
-    if row[0] == date and row[1].lower() == 'truck':
+    if row[1] == date and row[8].lower() == 'truck':
         truck_count += 1
 
 # Count of electric vehicles for the given date
 electric_vehicle_count = 0
 for row in data:
-    if row[0] == date and row[2].lower() == 'true':
+    if row[1] == date and row[9].lower() == 'true':
         electric_vehicle_count += 1
 
 # Count of two-wheeled vehicles for the given date
 two_wheeled_count = 0
 for row in data:
-    if row[0] == date and row[1].lower() in ['bike', 'motorbike', 'scooter']:
+    if row[1] == date and row[8].lower() in ['bike', 'motorcycle', 'scooter']:
         two_wheeled_count += 1
 
 # Total number of busses for the given date at the specified junction and direction
 bus_count = 0
+
 for row in data:
-    if row[0] == date and row[3].lower() == 'elm avenue/rabbit road' and row[4].lower() == 'north':
+    # Check if the conditions match
+    if (
+        row[1] == date and
+        row[0].lower() == "elm avenue/rabbit road" and  # Junction name
+        row[4].lower() == "n" and                  # Travel direction out
+        row[8].lower() == "buss"                        # Vehicle type
+    ):
         bus_count += 1
+
 
 # Count of vehicles going straight for the given date
 straight_count = 0
 for row in data:
-    if row[0] == date and row[4].lower() == 'straight':
+    if row[1] == date and row[3].lower() == row[4].lower():
         straight_count += 1
 
 # Truck percentage for the given date
 if total_count == 0:
     truck_percentage = 0
 else:
-    truck_percentage = (truck_count / total_count) * 100
+    truck_percentage = round((truck_count / total_count) * 100)
 
 # Average bicycles per hour for the given date
 bicycle_count = 0
 for row in data:
-    if row[0] == date and row[1].lower() == 'bicycle':
+    if row[1] == date and row[8].lower() == 'bicycle':
         bicycle_count += 1
 
 average_bicycles_per_hour = round(bicycle_count / 24)
@@ -116,18 +126,18 @@ average_bicycles_per_hour = round(bicycle_count / 24)
 
 over_speed_count = 0
 for row in data:
-    if row[0] == date and int(row[5]) > 'JunctionSpeedLimit':
+    if row[1] == date and int(row[6]) > int(row[7]):
 
         over_speed_count += 1
 
 vehicle_count_elm_rabbit_junction = 0
 for row in data:
-    if row[0] == date and row[3].lower() == 'elm avenue/rabbit road':
+    if row[1] == date and row[0].lower() == 'elm avenue/rabbit road':
         vehicle_count_elm_rabbit_junction += 1
 
 vehicle_count_hanley_westway_junction = 0
 for row in data:
-    if row[0] == date and row[3].lower() == 'Hanley Highway/Westway':
+    if row[1] == date and row[0].lower() == 'hanley highway/westway':
         vehicle_count_elm_rabbit_junction += 1
 
 total_vehicles = 0
@@ -136,21 +146,21 @@ scooter_count = 0
 # Iterate over each row in the data
 for row in data:
     # Check if the Date matches the selected date
-    if row[0] == date:
+    if row[1] == date:
         # Check if the junction matches Elm Avenue/Rabbit Road
-        if row[3].lower() == "elm avenue/rabbit road":
+        if row[0].lower() == "elm avenue/rabbit road":
             total_vehicles += 1
             # Check if the VehicleType is 'scooter'
-            if row[1].lower() == 'scooter':
+            if row[8].lower() == 'scooter':
                 scooter_count += 1
-scooter_percentage = (scooter_count / total_vehicles * 100) if total_vehicles > 0 else 0
+scooter_percentage =round((scooter_count / total_vehicles * 100)) if total_vehicles > 0 else 0
 
 hourly_counts = [0] * 24  # Assuming there are 24 hours in a day
 
 # Iterate over each row in the data
 for row in data:
     # Check if the Date matches the selected date and the junction matches Hanley Highway/Westway
-    if row[0] == date and row[3].lower() == 'Hanley Highway/Westway':
+    if row[1] == date and row[0].lower() == 'Hanley Highway/Westway':
         hour = int(row[1].split(':')[0])  # Extract the hour from the timestamp
         hourly_counts[hour] += 1
 
@@ -167,8 +177,8 @@ rain_hours = [False] * 24
 
 # Iterate over each row in the data
 for row in data:
-    if row[0] == date and "rain" in row[4].lower():  # Check for the selected date and rain in weather condition
-        hour = int(row[1].split(':')[0])  # Extract the hour from the timestamp
+    if row[1] == date and "light rain" in row[5].lower():  # Check for the selected date and rain in weather condition
+        hour = int(row[2].split(':')[0])  # Extract the hour from the timestamp
         rain_hours[hour] = True  # Mark that hour as rained
 
 # Calculate the total number of hours with rain
